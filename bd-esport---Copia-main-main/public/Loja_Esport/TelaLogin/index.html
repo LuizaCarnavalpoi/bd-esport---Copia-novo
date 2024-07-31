@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tela de Login</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxygen:wght@700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta:wght@275&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&display=swap" />
+<link rel="stylesheet" href="index.css" />
+</head>
+<body>
+<div class="container">
+<a href="../TelaOFC/index.html">
+<span class="e-sport">E-Sport</span>
+</a>
+<div class="form-container">
+<h1>Fazer Login</h1>
+<label for="email">E-mail</label>
+<input type="email" id="email" name="email" placeholder="Informe seu e-mail" required />
+
+<label for="password">Senha</label>
+<input type="password" id="password" name="password" placeholder="Digite sua senha" required />
+
+<a href="../TelaRecupSenha/index.html" class="forgot-password">Esqueceu a senha?</a>
+<br>
+<button class="submit-button" onclick="login()">Acessar conta</button>
+<br>
+<button class="create-account">
+<a href="../TelaCriarConta/index.html">Crie sua conta na E-Sport</a>
+</button>
+</div>
+</div>
+
+<script>
+  function login() {
+    const email = document.getElementById('email').value.trim(); // Remove espaços em branco
+    const password = document.getElementById('password').value.trim(); // Remove espaços em branco
+
+    // Verifica se os campos estão vazios
+    if (!email || !password) {
+      alert('Por favor, preencha o e-mail e a senha.');
+      return; // Impede o envio da solicitação
+    }
+
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro na solicitação: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Certifique-se de que a resposta contém a mensagem correta
+        if (data && data.message === 'Login bem-sucedido') {
+          alert('Login bem-sucedido');
+          // Redirecionar para a página de usuário ou dashboard
+          window.location.href = '../TelaOFC/index.html'; // Altere para a URL desejada
+        } else {
+          alert('Credenciais inválidas');
+        }
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+        alert('Ocorreu um erro ao tentar fazer login. Tente novamente mais tarde.');
+      });
+  }
+</script>
+
+</body>
+</html>
